@@ -74,6 +74,18 @@ async def ban(ctx, member: discord.Member = None):
     else:
         await ctx.send("This command should point to the user you want to ban. For example: `!ban @user`")
 
+@bot.event
+async def on_member_join(member):
+    # MENCOBA KIRIM KE KANAL SISTEM BAWAAN DISCORD
+    if member.guild.system_channel:
+        await member.guild.system_channel.send(f'Selamat datang, {member.mention}!')
+    else:
+        # ALTERNATIF: Cari kanal bernama 'selamat-datang' atau 'welcome'
+        welcome_channel = discord.utils.get(member.guild.text_channels, name='selamat-datang')
+        if welcome_channel:
+            await welcome_channel.send(f'Selamat datang, {member.mention}!')
+
+
 @ban.error
 async def ban_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
